@@ -1,13 +1,11 @@
 # Gallery
 
 Rendered previews of every template in this repo. These are **full OpenSCAD
-renders** (`openscad --render`) of the actual plate geometry — the same F6/CGAL
-evaluation that cuts the slots and reports `Volumes: 2` — not mockups.
+renders** (`openscad --render`) of the actual plate geometry.
 
 Two views per pattern:
 - **Flat** — top-down orthographic; white shows the slots cut clean through the plate.
-- **3D** — a 3/4 perspective showing the 1.6 mm plate thickness (the slots read as
-  gold channels — OpenSCAD's inner-face colour).
+- **3D** — a 3/4 perspective showing the plate thickness.
 
 ![All templates](_contact_sheet.png)
 
