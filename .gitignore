@@ -1,0 +1,11 @@
+# Build artifacts — regenerable with `make`; ship STLs via a GitHub Release.
+build/
+
+# OS / editor cruft
+.DS_Store
+*~
+*.swp
+
+# Python
+__pycache__/
+*.pyc
