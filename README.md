@@ -5,9 +5,8 @@ template is a flat plate with the pattern cut **all the way through** as thin
 slots. You lay the plate on fabric and mark through the slots with a chalk
 pencil / fabric pen, then stitch along the marks.
 
-See the **[gallery](gallery/INDEX.md)** for top-down and 3D renders of all 55 templates:
-
-![All templates](gallery/_contact_sheet.png)
+**[Browse the gallery →](https://michael-gebis.github.io/sashiko/)** — top-down and
+3D renders of all 55 templates, published from the `.scad` sources to GitHub Pages.
 
 ## How it works (and why)
 
@@ -537,23 +536,25 @@ A `Makefile` drives everything. Patterns are auto-discovered, so a new
 
 | Command | What it does |
 |---------|--------------|
-| `make` | Build everything out of date — STLs + gallery |
+| `make` | Build everything out of date — STLs + gallery site |
 | `make stl` | Build the printable `.stl` files into `build/` |
-| `make gallery` | Build the preview PNGs, the index + contact sheet |
-| `make index` | Regenerate `gallery/INDEX.md` from the `Description:` lines |
+| `make gallery` | Render previews + thumbnails + `gallery/index.html` |
+| `make index` | Regenerate `gallery/index.html` from the `Description:` lines |
 | `make verify` | Check every pattern renders as one solid (`Volumes: 2`) |
-| `make clean` | Remove generated STLs and gallery PNGs |
+| `make clean` | Remove `build/` and `gallery/` (all generated output) |
 | `make help` | List the targets |
 
-STLs are written to **`build/`**. Every output depends on `sashiko_lib.scad` +
-`sashiko_config.scad`, so changing a shared value (e.g. `plate_t` or `chamfer` in
-the config) rebuilds everything that uses it — and only what changed re-renders.
-Requires `openscad` and ImageMagick (`montage`); the standalone `build_gallery.sh`
-still works for previews only.
+STLs are written to **`build/`**; the gallery (previews, thumbnails, `index.html`)
+to **`gallery/`**. Both are git-ignored — STLs ship via a GitHub Release, and the
+gallery is rendered and published to **GitHub Pages** by `.github/workflows/pages.yml`
+on every push that touches a pattern (one-time setup: repo **Settings → Pages →
+Source = GitHub Actions**). Every output depends on `sashiko_lib.scad` +
+`sashiko_config.scad`, so changing a shared value (e.g. `plate_t` or `chamfer`)
+rebuilds everything that uses it. Requires `openscad` and ImageMagick (`convert`).
 
 Each pattern carries a `// Description:` comment (e.g. `// Description: **Amime** —
-Fishnet (網目)`). `gen_index.py` reads those to regenerate the gallery's index
-table — a file missing that line builds with a warning and a placeholder row.
+Fishnet (網目)`). `gen_index.py` reads those to build the gallery's `index.html`
+cards — a file missing that line builds with a warning and a placeholder caption.
 
 ## OpenSCAD tips
 

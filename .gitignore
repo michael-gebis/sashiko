@@ -1,5 +1,7 @@
-# Build artifacts — regenerable with `make`; ship STLs via a GitHub Release.
+# Build artifacts — regenerable with `make`. STLs ship via a GitHub Release;
+# the gallery is rendered and published to GitHub Pages by the pages workflow.
 build/
+gallery/
 
 # OS / editor cruft
 .DS_Store
