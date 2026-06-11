@@ -10,7 +10,6 @@ include <sashiko_config.scad>
 
 spacing   = 20;   // ring centre-to-centre spacing — pattern scale (mm)
 ring_frac = 0.58; // radius as a fraction of spacing (>0.5 so rings overlap)
-bridge_w  = 1.4;  // solid tab left in each ring (mm)
 
 R  = ring_frac * spacing;
 sy = spacing * sqrt(3) / 2;   // row spacing of the hex packing
@@ -19,7 +18,7 @@ r  = groove_w / 2;
 n_x = ceil(plate_w / spacing) + 2;
 n_y = ceil(plate_h / sy) + 2;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (j = [-1 : n_y])
         for (i = [-1 : n_x])
             bridged_circle([i*spacing + (j % 2)*(spacing/2), j*sy],

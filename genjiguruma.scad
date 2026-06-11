@@ -11,7 +11,6 @@ spacing   = 25;   // wheel-to-wheel spacing — pattern scale (mm)
 R         = 10.5; // wheel (rim) radius (mm)
 spokes    = 8;    // number of spokes
 hub       = 3;    // open hub radius — spokes stop here (mm)
-bridge_w  = 1.4;  // solid tab in the rim (mm)
 
 r = groove_w / 2;
 
@@ -27,7 +26,7 @@ module wheel(cx, cy) {
 n_x = ceil(plate_w / spacing) + 1;
 n_y = ceil(plate_h / spacing) + 1;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (i = [0 : n_x])
         for (j = [0 : n_y])

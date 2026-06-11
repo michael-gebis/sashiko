@@ -18,6 +18,24 @@ module slot_dash(p1, p2, r) {
     }
 }
 
+// Straight slot p1->p2 pulled in by `gap` at each end, leaving a solid corner of
+// width ~gap where several meet (the corner-gap trick used by the polygon
+// tilings — hishi, kikko, masu, …).
+module corner_seg(p1, p2, r, gap) {
+    L = norm([p2[0]-p1[0], p2[1]-p1[1]]);
+    d = [(p2[0]-p1[0])/L, (p2[1]-p1[1])/L];
+    if (L > 2*gap + 0.1)
+        slot_dash([p1[0]+d[0]*gap, p1[1]+d[1]*gap],
+                  [p2[0]-d[0]*gap, p2[1]-d[1]*gap], r);
+}
+
+// Regular hexagon outline of corner-gapped edges. a0 = first-vertex angle:
+// 90 = pointy-top (default), 0 = flat-top.
+module hex_outline(c, R, r, gap, a0 = 90) {
+    V = [for (i = [0:5]) [c[0] + R*cos(a0 + 60*i), c[1] + R*sin(a0 + 60*i)]];
+    for (i = [0:5]) corner_seg(V[i], V[(i+1) % 6], r, gap);
+}
+
 // --- straight slot with periodic bridges ---------------------------------
 
 // Straight slot p1->p2. Always leaves >=1 bridge (so the faces on either side
@@ -94,7 +112,13 @@ module bridged_circle(c, R, r, bridge_w, bridge_angles) {
 // chamfer (mm, 0 = off) bevels the four OUTER top edges at 45°. It only touches
 // the solid border (border > chamfer), never the slots, which are still cut
 // full-thickness afterwards. Keep chamfer < t (ideally <= t/2).
-module sashiko_plate(w, h, t, border, chamfer = 0, eps = 0.1) {
+//
+// reg (off by default) cuts a datum hole at each corner of the pattern window.
+// Mark those four dots, then reposition the plate so its leading holes sit on the
+// previous placement's dots: that steps the plate by exactly the window size
+// (w-2*border, h-2*border) and butts the patterns at the boundary — seamless when
+// the pattern's repeat divides that pitch.
+module sashiko_plate(w, h, t, border, chamfer = 0, reg = false, reg_d = 1.5, eps = 0.1) {
     difference() {
         if (chamfer > 0) chamfered_box(w, h, t, chamfer);
         else             cube([w, h, t]);
@@ -105,6 +129,11 @@ module sashiko_plate(w, h, t, border, chamfer = 0, eps = 0.1) {
                 square([w - 2*border, h - 2*border]);
             children();
         }
+        if (reg)
+            translate([0, 0, -eps])
+            linear_extrude(t + 2*eps)
+            for (x = [border, w - border], y = [border, h - border])
+                translate([x, y]) circle(r = reg_d/2, $fn = 24);
     }
 }
 

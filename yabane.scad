@@ -24,6 +24,6 @@ module feather(cx) {
     }
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (c = [0 : ceil(plate_w / col_sp)])
         feather(c * col_sp);

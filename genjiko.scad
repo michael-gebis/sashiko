@@ -26,7 +26,7 @@ module genji(ox, oy, sym) {
             slot_dash([ox + g[t]*bar_sp, oy + bar_h], [ox + g[t+1]*bar_sp, oy + bar_h], r);
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (i = [0 : ceil(plate_w / px) + 1])
         for (j = [0 : ceil(plate_h / py) + 1])

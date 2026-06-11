@@ -11,7 +11,6 @@ spacing   = 22;   // motif-to-motif spacing — pattern scale (mm)
 R_out     = 9;    // outer ring radius (mm)
 R_in      = 5;    // inner ring radius (mm)
 dot_r     = 1.6;  // centre dot radius (mm)
-bridge_w  = 1.4;  // solid tab in each ring (mm)
 
 r = groove_w / 2;
 
@@ -24,7 +23,7 @@ module janome(cx, cy) {
 n_x = ceil(plate_w / spacing) + 1;
 n_y = ceil(plate_h / spacing) + 1;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (i = [0 : n_x])
         for (j = [0 : n_y])

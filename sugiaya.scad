@@ -21,7 +21,7 @@ module twill_band(yb, s) {
     }
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (b = [0 : ceil(plate_h / band) + 1])
         twill_band(b * band, (b % 2 == 0) ? 1 : -1);

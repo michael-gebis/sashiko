@@ -18,7 +18,7 @@ module zigzag(y0) {
     for (k = [0 : len(pts)-2]) slot_dash(pts[k], pts[k+1], r);
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (row = [0 : ceil(plate_h / row_sp) + 1])
         zigzag(row * row_sp);

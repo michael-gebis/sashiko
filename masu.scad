@@ -13,13 +13,7 @@ corner_gap= 1.4;  // solid left uncut at each corner (mm)
 
 r = groove_w / 2;
 
-module seg(p1, p2) {
-    L = norm([p2[0]-p1[0], p2[1]-p1[1]]);
-    d = [(p2[0]-p1[0])/L, (p2[1]-p1[1])/L];
-    if (L > 2*corner_gap + 0.1)
-        slot_dash([p1[0]+d[0]*corner_gap, p1[1]+d[1]*corner_gap],
-                  [p2[0]-d[0]*corner_gap, p2[1]-d[1]*corner_gap], r);
-}
+module seg(p1, p2) { corner_seg(p1, p2, r, corner_gap); }
 
 module box(cx, cy, h) {
     seg([cx-h, cy-h], [cx+h, cy-h]); seg([cx+h, cy-h], [cx+h, cy+h]);
@@ -29,7 +23,7 @@ module box(cx, cy, h) {
 n_x = ceil(plate_w / cell) + 2;
 n_y = ceil(plate_h / cell) + 2;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (i = [-1 : n_x])
         for (j = [-1 : n_y]) {

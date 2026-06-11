@@ -25,7 +25,7 @@ module stream(y0, ph) {
     }
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (b = [0 : ceil(plate_h / band_sp) + 1])
         stream(b*band_sp, b*120);

@@ -6,7 +6,6 @@ use <sashiko_lib.scad>
 include <sashiko_config.scad>
 
 hex_r     = 12;    // hexagon circumradius — pattern scale (mm)
-bridge_w  = 1.4;   // solid tab left in each slot (mm; ~1.2 min for strength)
 bridge_sp = 14;    // target spacing between bridges on long runs (mm)
 
 col_sp = hex_r * sqrt(3);
@@ -40,7 +39,7 @@ module asanoha_cell(cx, cy) {
 n_cols = ceil(plate_w / col_sp) + 3;
 n_rows = ceil(plate_h / row_sp) + 3;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (row = [0 : n_rows]) {
         row_off = (row % 2) * (col_sp / 2);
         for (col = [0 : n_cols])

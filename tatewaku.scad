@@ -22,6 +22,6 @@ module wave(cx, sgn) {
     for (k = [0 : len(pts)-2]) slot_dash(pts[k], pts[k+1], r);
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (c = [0 : ceil(plate_w / col_sp) + 1])
         wave(c * col_sp, (c % 2 == 0) ? 1 : -1);

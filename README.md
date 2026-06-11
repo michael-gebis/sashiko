@@ -54,8 +54,8 @@ is actually `bridge_w` wide.
 The plate-level parameters live in **`sashiko_config.scad`**, which every
 template `include`s (use `include`, not `use`, so the variables come through) —
 edit one value there and it changes every template at once. Everything else
-(`bridge_w`/`bridge_sp`, plus each pattern's scale and `corner_gap`) stays in the
-individual template files.
+(`bridge_sp` and each pattern's scale and `corner_gap`) stays in the individual
+template files.
 
 | Parameter | Value | Where | Notes |
 |-----------|-------|-------|-------|
@@ -64,8 +64,22 @@ individual template files.
 | `groove_w` | 1.2 mm | config | Slot width |
 | `border` | 6 mm | config | Solid margin around plate edge |
 | `chamfer` | 0.5 mm | config | 45° bevel on the four outer top edges (0 = off; keep ≤ t/2) |
-| `bridge_w` | 1.4 mm | template | Solid tab left in each slot (~1.2 mm min for strength) |
+| `reg` | off | config | Datum holes at the pattern-window corners, for tiling (see below) |
+| `bridge_w` | 1.4 mm | config | Solid tab left in each slot (~1.2 mm min for strength) |
 | `bridge_sp` | 14 mm | template | Target spacing between bridges on long lines |
+
+### Registration & tiling
+
+`reg = true` in the config cuts a small datum hole at each corner of the pattern
+window (the marked area) on every plate. To cover a piece larger than one plate:
+mark the pattern **and** the four datum dots, then reposition the plate so its
+leading holes sit on the previous placement's dots. That steps the plate by
+exactly the window size — `plate_w − 2·border` across, `plate_h − 2·border` down
+(88 mm with the defaults) — and butts the two patterns at the boundary.
+
+The join is **seamless only if the pattern's repeat divides that pitch**, so pick
+a scale that does (e.g. `cell = 8 / 11 / 16 / 22 mm`). Otherwise placements are
+still evenly aligned, just with a small step at each seam. `reg` is off by default.
 
 ## Files
 
@@ -548,3 +562,9 @@ table — a file missing that line builds with a warning and a placeholder row.
   `openscad -o build/asanoha.stl asanoha.scad` (or just `make stl`)
 - Quick top-down preview image:
   `openscad --camera=50,50,0,0,0,0,180 --projection=ortho -o out.png asanoha.scad`
+
+## License
+
+MIT — see [LICENSE](LICENSE). The patterns are traditional Japanese motifs (not
+themselves copyrightable); the license covers the OpenSCAD implementations and
+the build tooling.

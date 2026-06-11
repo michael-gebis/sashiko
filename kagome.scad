@@ -18,25 +18,16 @@ r = groove_w / 2;
 // every lattice vertex, so leaving the vertices solid joins them while the
 // woven outlines stay continuous. Only the hexagons are drawn — each triangular
 // gap is bounded by one edge from each of its three neighbouring hexagons.
-module seg(p1, p2) {
-    L = norm([p2[0]-p1[0], p2[1]-p1[1]]);
-    d = [(p2[0]-p1[0])/L, (p2[1]-p1[1])/L];
-    if (L > 2*corner_gap + 0.1)
-        slot_dash([p1[0]+d[0]*corner_gap, p1[1]+d[1]*corner_gap],
-                  [p2[0]-d[0]*corner_gap, p2[1]-d[1]*corner_gap], r);
-}
+module seg(p1, p2) { corner_seg(p1, p2, r, corner_gap); }
 
 // Flat-top hexagon (vertices at 0,60,...,300) so its left/right corners point
 // straight at the neighbouring hexagons.
-module hexagon(cx, cy) {
-    V = [for (i = [0:5]) [cx + hex_r*cos(60*i), cy + hex_r*sin(60*i)]];
-    for (i = [0:5]) seg(V[i], V[(i+1)%6]);
-}
+module hexagon(cx, cy) { hex_outline([cx, cy], hex_r, r, corner_gap, 0); }
 
 n_cols = ceil(plate_w / c) + 3;
 n_rows = ceil(plate_h / row_sp) + 3;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (row = [0 : n_rows]) {
         row_off = (row % 2) * (c / 2);
         for (col = [0 : n_cols])

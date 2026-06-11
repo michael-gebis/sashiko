@@ -23,7 +23,7 @@ module feathers(cx, yoff) {
     }
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (c = [0 : ceil(plate_w / col_w) + 1])
         feathers(c * col_w, (c % 2) * (feather_sp/2));

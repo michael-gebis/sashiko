@@ -39,7 +39,7 @@ module vine(y0) {
     }
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (row = [0 : ceil(plate_h / row_sp) + 1])
         vine(row * row_sp);

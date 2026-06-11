@@ -26,7 +26,7 @@ module rice(cx, cy) {
 n_x = ceil(plate_w / cell) + 1;
 n_y = ceil(plate_h / cell) + 1;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (i = [0 : n_x])
         for (j = [0 : n_y])
             rice(i*cell, j*cell);

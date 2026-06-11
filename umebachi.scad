@@ -22,7 +22,7 @@ module umebachi(cx, cy) {
 n_x = ceil(plate_w / spacing) + 1;
 n_y = ceil(plate_h / spacing) + 1;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (j = [0 : n_y])
         for (i = [0 : n_x])

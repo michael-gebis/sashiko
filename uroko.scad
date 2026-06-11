@@ -16,13 +16,7 @@ r = groove_w / 2;
 
 // One edge, drawn short of both ends (six triangles meet per vertex, so the
 // solid vertex joins them while the outlines stay continuous).
-module seg(p1, p2) {
-    L = norm([p2[0]-p1[0], p2[1]-p1[1]]);
-    d = [(p2[0]-p1[0])/L, (p2[1]-p1[1])/L];
-    if (L > 2*corner_gap + 0.1)
-        slot_dash([p1[0]+d[0]*corner_gap, p1[1]+d[1]*corner_gap],
-                  [p2[0]-d[0]*corner_gap, p2[1]-d[1]*corner_gap], r);
-}
+module seg(p1, p2) { corner_seg(p1, p2, r, corner_gap); }
 
 // Upward-pointing triangle with bottom-left corner at (x0,y0).
 module up_tri(x0, y0) {
@@ -33,7 +27,7 @@ module up_tri(x0, y0) {
 n_i = ceil(plate_w / tri) + 2;
 n_j = ceil(plate_h / hgt) + 2;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (j = [0 : n_j])
         for (i = [-1 : n_i])
             up_tri(i*tri + (j % 2)*(tri/2), j*hgt);

@@ -30,7 +30,7 @@ module tuft(cx, cy, dir) {
     blade(cx, cy, blade_len*0.66, bend*1.9, dir);
 }
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (j = [-1 : ceil(plate_h / pitch_y) + 1])
         for (i = [-1 : ceil(plate_w / pitch_x) + 1])

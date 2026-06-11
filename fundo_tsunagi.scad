@@ -36,7 +36,7 @@ module netcell(cx, cy) {
 n_i = ceil(plate_w / a) + 2;
 n_j = ceil(plate_h / b) + 2;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (i = [-1 : n_i])
         for (j = [-1 : n_j])

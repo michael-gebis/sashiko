@@ -7,7 +7,6 @@ include <sashiko_config.scad>
 
 R         = 14;   // outer radius of a scale (mm)
 n_arcs    = 3;    // concentric arcs per scale
-bridge_w  = 1.4;  // solid tab left in each slot (mm)
 bridge_sp = 16;   // target spacing between bridges along an arc (mm)
 
 // Scales sit edge-to-edge in a row (col_pitch = 2R) and each row nests a half-
@@ -28,7 +27,7 @@ module scale(cx, cy) {
 n_cols = ceil(plate_w / col_pitch) + 3;
 n_rows = ceil(plate_h / row_pitch) + 3;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (row = [0 : n_rows])
         for (col = [0 : n_cols])
             scale((col - 1)*col_pitch + (row % 2)*(col_pitch/2),

@@ -13,7 +13,7 @@ row_sp = spacing * sqrt(3) / 2;
 n_x = ceil(plate_w / spacing) + 2;
 n_y = ceil(plate_h / row_sp) + 2;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
 union()
     for (j = [-1 : n_y])
         for (i = [-1 : n_x])

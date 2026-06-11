@@ -39,7 +39,7 @@ module manji(cx, cy) {
 // Cover the plate's half-diagonal in lattice steps (|v1| = unit*sqrt(10)).
 N = ceil(sqrt(plate_w*plate_w + plate_h*plate_h) / 2 / (unit*sqrt(10))) + 1;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (m = [-N:N]) for (n = [-N:N])
         manji(plate_w/2 + m*v1[0] + n*v2[0],
               plate_h/2 + m*v1[1] + n*v2[1]);

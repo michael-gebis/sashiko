@@ -6,7 +6,6 @@ use <sashiko_lib.scad>
 include <sashiko_config.scad>
 
 spacing  = 16;    // centre-to-centre distance between circles (mm)
-bridge_w = 1.4;   // solid tab left in each slot (mm)
 
 // r = spacing*√2/2  =>  exactly 4 circles meet at each grid-square centre.
 circle_r = spacing * sqrt(2) / 2;
@@ -26,7 +25,7 @@ module ring(cx, cy)
 n_cols = ceil(plate_w / spacing) + 3;
 n_rows = ceil(plate_h / spacing) + 3;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (row = [0 : n_rows])
         for (col = [0 : n_cols])
             ring((col - 1)*spacing, (row - 1)*spacing);

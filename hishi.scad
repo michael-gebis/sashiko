@@ -16,13 +16,7 @@ r = groove_w / 2;
 // One diamond edge, drawn slightly short of both corners. Four diamonds meet
 // at every corner, so leaving the corners solid joins them all while the edges
 // stay continuous (mid-edge bridges instead break the outline into X shapes).
-module seg(p1, p2) {
-    L = norm([p2[0]-p1[0], p2[1]-p1[1]]);
-    d = [(p2[0]-p1[0])/L, (p2[1]-p1[1])/L];
-    if (L > 2*corner_gap + 0.1)
-        slot_dash([p1[0]+d[0]*corner_gap, p1[1]+d[1]*corner_gap],
-                  [p2[0]-d[0]*corner_gap, p2[1]-d[1]*corner_gap], r);
-}
+module seg(p1, p2) { corner_seg(p1, p2, r, corner_gap); }
 
 // Diamonds with half-diagonals (a, b) tile edge-to-edge when centred on every
 // (i*a, j*b) with i+j even — each diamond's vertices land on its neighbours'.
@@ -37,7 +31,7 @@ module diamond(cx, cy) {
 n_i = ceil(plate_w / a) + 2;
 n_j = ceil(plate_h / b) + 2;
 
-sashiko_plate(plate_w, plate_h, plate_t, border, chamfer)
+sashiko_plate(plate_w, plate_h, plate_t, border, chamfer, reg)
     for (i = [0 : n_i])
         for (j = [0 : n_j])
             if ((i + j) % 2 == 0)
