@@ -43,6 +43,10 @@ Different tilings detach differently. Whichever you use, verify with `Volumes: 2
 - **Polygon tilings (hishi, kikkō, masu):** leave the **corners** uncut — `corner_seg`
   stops each slot short of the vertex, where several cells meet, so a solid corner joins
   them all while the edges stay continuous (`hex_outline` applies this to hexagons).
+  Size `corner_gap` to the **sharpest angle θ** between slots at the vertex: the solid
+  neck between two slot caps is `2·gap·sin(θ/2) − groove_w`, so gap 1.4 suits 90°
+  vertices but 60° vertices need 1.8 — too small a gap leaves hairline necks
+  (`make audit` reports them as *min link*).
 - **Curve/overlap patterns (shippō, seigaiha):** bridge placement matters more than count.
   Bridge where overlaps are *deep* (shippō cardinals), not where curves merely *touch*
   (tangent points give point contacts, not joins). Reduce overlap (seigaiha `col_pitch = 2R`)
@@ -374,6 +378,8 @@ from each grid corner. Dots enclose nothing, so no bridges.
 
 A grid of wheels — a bridged rim with radial spokes that stop short of an open
 hub, so the sectors all connect through the hub and out through the rim bridges.
+The rim bridges sit halfway *between* spokes: a spoke tip reaching the rim at a
+bridge angle punches through the tab and leaves only ~0.1 mm straps.
 
 **Key parameters:** `spacing` (25 mm), `R` (10.5 mm), `spokes` (8).
 
@@ -544,11 +550,14 @@ Starting points for a future pass:
   **knife-edge wedge tips** (≤ 0.11 mm, the audit's resolution floor): where merging slots
   pinch the solid between them, it tapers to zero. Expect those tips to print as wisps or
   tiny local holes — likely cosmetic on a marking jig, but they're the plates to test-print
-  first. Ten more measure 0.17–0.41 mm (hana-shippō, mitsuuroko, wachigai, wari-bishi at
-  0.17; komezashi 0.23; tumbling-blocks 0.32; kakinohanazashi 0.38; kagome, uroko,
-  wachigai_woven 0.41); everything else is ≥ 0.47 mm. If a knife-edge pattern misprints,
-  the fix is corner-gap style: stop the converging slots just short of their merge.
-  **Nothing has been test-printed yet.**
+  first. Six more have walls of 0.17–0.41 mm (hana-shippō, wachigai, wari-bishi at 0.17;
+  komezashi 0.23; kakinohanazashi 0.38; wachigai_woven 0.41); everything else is
+  ≥ 0.47 mm. If a knife-edge pattern misprints, the fix is corner-gap style: stop the
+  converging slots just short of their merge. The **min link** (load-bearing) side is
+  healthy everywhere — ≥ 0.47 mm — except wachigai_woven's 0.38 mm weave straps, where
+  each over-passing ring pierces the under-ring's break by design; if those prove too
+  weak in print, raise its `gap_deg` (7° → 9° roughly doubles the straps at the cost of
+  longer line breaks). **Nothing has been test-printed yet.**
 - **Some patterns are stylised interpretations,** not validated by a practitioner — e.g.
   bishamon-kikkō, matsukawabishi, mitsumori-kikkō, mitsudomoe, fundō-tsunagi, ichimatsu,
   amime. Treat their geometry as "inspired by," not canonical.
@@ -593,18 +602,26 @@ cards — a file missing that line builds with a warning and a placeholder capti
 of printability: nothing in that solid is too thin. The plates are uniform
 extrusions, so a full-plate orthographic top render (`build/audit/`, 2000 px ≈
 0.06 mm/px) *is* the 2D geometry; `audit_minwall.py` segments it, calibrates
-mm/px from the plate's 100 mm footprint, and binary-searches the smallest width
-`w` whose morphological opening (erode + dilate by a disc of `w/2`) removes a
-significant piece of solid — a wall, neck, or wedge thinner than `w`. Each
-pattern's value is compared against the committed `minwall_baseline.json`
-(0.15 mm tolerance) and CI fails on regression; after an intentional geometry
-change, run `make audit-baseline` and commit the updated baseline.
+mm/px from the plate's 100 mm footprint, and binary-searches two widths per
+pattern:
 
-Two things to know when reading the numbers (also in `audit_minwall.py --help`):
-accuracy is pixel-bound (~±0.1 mm; render larger for finer), and the metric is
-the thinnest **unsupported span** — a thin stretch within reach of thicker bulk
-is reported as supported, so a stout lattice like mame-shibori's 5.4 mm walls
-between fatter junctions reads `>= 2.0` rather than 5.4. Needs `python3-numpy`.
+- **min wall** — smallest `w` whose morphological opening (erode + dilate by a
+  disc of `w/2`) removes a significant piece of solid: a wall, neck, or wedge
+  thinner than `w` *and too far from thicker bulk to be supported by it*.
+- **min link** — smallest `w` whose erosion alone splits the solid into more
+  than one piece: the thinnest **load-bearing connection**. This catches short
+  necks that min wall treats as supported — it's what found genjiguruma's
+  diagonal spoke tips landing exactly on the rim's bridge tabs, leaving 0.1 mm
+  straps as each wheel's only anchor (fixed by moving the bridges between the
+  spokes). For a healthy pattern it reads as the designed bridge/neck width.
+
+Both values are compared against the committed `minwall_baseline.json` (0.15 mm
+tolerance) and CI fails on regression; after an intentional geometry change,
+run `make audit-baseline` and commit the updated baseline. Notes for reading
+the numbers (also in `audit_minwall.py --help`): accuracy is pixel-bound
+(~±0.1 mm; render larger for finer), and min wall reports the thinnest
+**unsupported span** — a stout lattice like mame-shibori's 5.4 mm walls between
+fatter junctions reads `>= 2.0` rather than 5.4. Needs `python3-numpy`.
 
 ## OpenSCAD tips
 

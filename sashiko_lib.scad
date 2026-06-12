@@ -18,9 +18,11 @@ module slot_dash(p1, p2, r) {
     }
 }
 
-// Straight slot p1->p2 pulled in by `gap` at each end, leaving a solid corner of
-// width ~gap where several meet (the corner-gap trick used by the polygon
-// tilings — hishi, kikko, masu, …).
+// Straight slot p1->p2 pulled in by `gap` at each end, leaving a solid corner
+// where several meet (the corner-gap trick used by the polygon tilings — hishi,
+// kikko, masu, …). Size gap to the SHARPEST angle θ between slots at the vertex:
+// the solid neck between two caps is 2·gap·sin(θ/2) − 2r, so for a ~0.6 mm neck
+// gap = 1.4 suits 90° corners and gap = 1.8 suits 60° corners.
 module corner_seg(p1, p2, r, gap) {
     L = norm([p2[0]-p1[0], p2[1]-p1[1]]);
     d = [(p2[0]-p1[0])/L, (p2[1]-p1[1])/L];

@@ -9,7 +9,7 @@ include <sashiko_config.scad>
 
 tri       = 9;    // small triangle edge — pattern scale (mm)
 gap       = 6;    // gap between crests (mm)
-corner_gap= 1.3;  // solid left uncut at each vertex (mm)
+corner_gap= 1.8;  // solid left uncut at each vertex (mm; 60° corners need >=1.8)
 
 hgt = tri * sqrt(3) / 2;
 r = groove_w / 2;

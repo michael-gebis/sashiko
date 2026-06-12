@@ -8,7 +8,8 @@ use <sashiko_lib.scad>
 include <sashiko_config.scad>
 
 hex_r     = 11;   // hexagon circumradius = triangle edge — pattern scale (mm)
-corner_gap= 1.5;  // solid left uncut at each lattice vertex (mm)
+corner_gap= 1.8;  // solid left uncut at each lattice vertex (mm; the two hexagons
+                  // meet at 60° here, and 60° corners need >=1.8)
 
 c      = 2 * hex_r;          // hex centres touch corner-to-corner at 2*circumradius
 row_sp = c * sqrt(3) / 2;    // triangular lattice of hex centres

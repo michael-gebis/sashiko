@@ -8,7 +8,7 @@ include <sashiko_config.scad>
 
 cell      = 10;   // spot-to-spot spacing — pattern scale (mm)
 spot      = 2.6;  // spot half-size (mm)
-corner_gap= 1.0;  // solid left uncut at each spot corner (mm)
+corner_gap= 1.4;  // solid left uncut at each spot corner (mm; 90° corners need >=1.4)
 
 r = groove_w / 2;
 

@@ -9,7 +9,8 @@ use <sashiko_lib.scad>
 include <sashiko_config.scad>
 
 hex_r     = 14;   // hexagon circumradius (= cube size) — pattern scale (mm)
-corner_gap= 1.4;  // solid left uncut at vertices and the hex centre (mm)
+corner_gap= 1.8;  // solid left uncut at vertices and the hex centre (mm; the Y
+                  // meets the rim at 60°, and 60° corners need >=1.8)
 
 col_sp = hex_r * sqrt(3);
 row_sp = hex_r * 1.5;

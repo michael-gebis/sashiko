@@ -9,7 +9,7 @@ use <sashiko_lib.scad>
 include <sashiko_config.scad>
 
 tri       = 15;   // triangle edge — pattern scale (mm)
-corner_gap= 1.5;  // solid left uncut at each vertex (mm)
+corner_gap= 1.8;  // solid left uncut at each vertex (mm; 60° corners need >=1.8)
 
 hgt = tri * sqrt(3) / 2;   // triangle height (row spacing)
 r = groove_w / 2;

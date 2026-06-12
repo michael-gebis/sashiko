@@ -1,28 +1,37 @@
 #!/usr/bin/env python3
-"""Min-wall audit: measure each template's thinnest solid wall from its
-top-down gallery render.
+"""Min-wall audit: measure each template's thinnest solid features from a
+full-plate top-down render.
 
-The plates are uniform extrusions, so the top-down orthographic PNG *is* the 2D
+The plates are uniform extrusions, so a top-down orthographic PNG *is* the 2D
 solid geometry, already rasterized: background-coloured pixels are cuts (or
 outside the plate), everything else is solid. We segment that mask, calibrate
-mm/px from the plate's known 100 mm footprint, then binary-search the smallest
-width w whose morphological opening (erode + dilate by a disc of radius w/2)
-removes a significant piece of solid — i.e. a wall, neck, or wedge thinner
-than w. Plain 90-degree corners shed only ~0.21*(w/2)^2 of area under opening,
-so an area filter of area_factor*(w/2)^2 separates real thin features from
-corner rounding.
+mm/px from the plate's known 100 mm footprint, and report two widths:
+
+* **min wall** — the smallest w whose morphological opening (erode + dilate by
+  a disc of radius w/2) removes a significant piece of solid: a wall, neck, or
+  wedge thinner than w *and too far from thicker bulk to be supported by it*.
+  Plain 90-degree corners shed only ~0.21*(w/2)^2 under opening, so an area
+  filter of area_factor*(w/2)^2 separates real thin features from corner
+  rounding.
+* **min link** — the smallest w whose *erosion alone* (by w/2) splits the
+  solid into more than one piece: the width of the thinnest load-bearing
+  connection. This catches short necks that min wall deliberately treats as
+  supported — e.g. a slot cap landing on a bridge tab and leaving hairline
+  straps. For a healthy bridged pattern this is roughly the bridge width.
 
 `Volumes: 2` (make verify) proves the plate is one connected solid; this audit
-covers the other half of printability: nothing in that solid is too thin.
+covers the other half of printability: nothing in that solid is too thin, and
+nothing hangs on a hairline.
 
-Accuracy is pixel-bound: about +/-2 px (~+/-0.2 mm at the gallery's 1000 px
-renders). Render larger images for finer numbers. Reported coordinates are
-plate mm, origin at the plate's bottom-left corner.
+Accuracy is pixel-bound: about +/-2 px (~+/-0.1 mm at the 2000 px audit
+renders). Render larger for finer numbers. Reported coordinates are plate mm,
+origin at the plate's bottom-left corner; `link@(x,y)` marks the first piece
+to detach.
 
 Needs numpy and ImageMagick's `convert` (both already build dependencies).
 
 Usage:
-  python3 audit_minwall.py gallery/*.png                  # report, worst first
+  python3 audit_minwall.py build/audit/*.png              # report, worst first
   python3 audit_minwall.py ... --json build/minwall.json
   python3 audit_minwall.py ... --check minwall_baseline.json   # CI gate
   python3 audit_minwall.py ... --write-baseline minwall_baseline.json
@@ -39,6 +48,7 @@ import numpy as np
 PLATE_MM = 100.0          # plate footprint; calibrates mm/px per image
 BG_DIST = 60              # min L1 RGB distance from background to count as solid
 MIN_AREA_PX = 4.0         # ignore removed blobs smaller than this (AA specks)
+MIN_PIECE_PX = 25         # ignore detached crumbs smaller than this (erosion litter)
 
 
 def read_solid_mask(path):
@@ -89,43 +99,86 @@ def conv2(mask, K):
     return out[kh // 2:kh // 2 + H, kw // 2:kw // 2 + W]
 
 
+def erode(mask, rpx):
+    K = disc(rpx)
+    return conv2(mask, K) > K.sum() - 0.5
+
+
+def components(mask, min_px):
+    """8-connected components via row-run union-find.
+    Returns [(size_px, centroid_row, centroid_col), ...] largest first."""
+    parent, size, sum_r, sum_c = [], [], [], []
+
+    def find(a):
+        while parent[a] != a:
+            parent[a] = parent[parent[a]]
+            a = parent[a]
+        return a
+
+    prev = []                                  # [(s, e, root), ...] sorted
+    for rno, row in enumerate(mask):
+        idx = np.flatnonzero(np.diff(np.concatenate(
+            ([0], row.view(np.int8), [0]))))
+        runs = []
+        j = 0
+        for s, e in zip(idx[::2].tolist(), idx[1::2].tolist()):
+            rid = len(parent)
+            parent.append(rid)
+            size.append(e - s)
+            sum_r.append(rno * (e - s))
+            sum_c.append((s + e - 1) * (e - s) / 2)
+            while j and prev[j - 1][1] >= s:   # rewind: prior run may also touch
+                j -= 1
+            while j < len(prev) and prev[j][0] <= e:   # 8-conn: ps <= e, s <= pe
+                if prev[j][1] >= s:
+                    ra, rb = find(rid), find(prev[j][2])
+                    if ra != rb:
+                        parent[ra] = rb
+                        size[rb] += size[ra]
+                        sum_r[rb] += sum_r[ra]
+                        sum_c[rb] += sum_c[ra]
+                j += 1
+            runs.append((s, e, rid))
+        prev, j = runs, 0
+    roots = {}
+    for rid in range(len(parent)):
+        if find(rid) == rid and size[rid] >= min_px:
+            roots[rid] = (size[rid], sum_r[rid] / size[rid], sum_c[rid] / size[rid])
+    return sorted(roots.values(), reverse=True)
+
+
 def thin_parts(solid, w_px, area_factor):
     """Solid pixels removed by opening with a disc of radius w_px/2, as
-    8-connected components above the significance threshold.
-    Returns [(area_px, row, col), ...] largest first."""
+    components above the significance threshold. Largest first."""
     rpx = w_px / 2.0
-    K = disc(rpx)
-    eroded = conv2(solid, K) > K.sum() - 0.5
-    opened = conv2(eroded, K) > 0.5
+    eroded = erode(solid, rpx)
+    opened = conv2(eroded, disc(rpx)) > 0.5
     removed = solid & ~opened
     min_area = max(area_factor * rpx * rpx, MIN_AREA_PX)
-    pts = np.argwhere(removed)
-    if len(pts) == 0:
-        return []
-    todo = set(map(tuple, pts))
-    comps = []
-    while todo:
-        stack = [todo.pop()]
-        comp = []
-        while stack:
-            p = stack.pop()
-            comp.append(p)
-            r0, c0 = p
-            for dr in (-1, 0, 1):
-                for dc in (-1, 0, 1):
-                    q = (r0 + dr, c0 + dc)
-                    if q in todo:
-                        todo.remove(q)
-                        stack.append(q)
-        if len(comp) >= min_area:
-            a = np.array(comp)
-            comps.append((len(comp), a[:, 0].mean(), a[:, 1].mean()))
-    comps.sort(reverse=True)
-    return comps
+    return components(removed, min_area)
+
+
+def bsearch(w_min, w_max, px, probe):
+    """Smallest w in [w_min, w_max] where probe(w) is truthy, to 1 px.
+    -> (w, bound, probe_result)."""
+    hi_res = probe(w_max)
+    if not hi_res:
+        return w_max, "ge", []
+    lo_res = probe(w_min)
+    if lo_res:
+        return w_min, "le", lo_res
+    lo, hi = w_min, w_max
+    while hi - lo > px:
+        mid = (lo + hi) / 2
+        res = probe(mid)
+        if res:
+            hi, hi_res = mid, res
+        else:
+            lo = mid
+    return hi, "exact", hi_res
 
 
 def audit(path, w_max, area_factor):
-    """-> dict with min_wall_mm, bound ('le'|'exact'|'ge'), spots [[x,y],..]."""
     solid = read_solid_mask(path)
     rows = np.flatnonzero(solid.any(axis=1))
     cols = np.flatnonzero(solid.any(axis=0))
@@ -135,39 +188,40 @@ def audit(path, w_max, area_factor):
     sub = solid[max(r0 - pad, 0):r1 + pad + 1, max(c0 - pad, 0):c1 + pad + 1]
     sr0, sc0 = max(r0 - pad, 0), max(c0 - pad, 0)
 
-    def spots_mm(comps):
+    def to_mm(comps, n):
         # image row 0 is the plate's top edge (+y), so flip y
         return [[round((sc0 + cc - c0) * px, 1), round((r1 - (sr0 + cr)) * px, 1)]
-                for _, cr, cc in comps[:2]]
+                for _, cr, cc in comps[:n]]
 
     w_min = max(2 * px, 0.1)                        # below ~2 px is unmeasurable
-    hi_parts = thin_parts(sub, w_max / px, area_factor)
-    if not hi_parts:
-        return {"min_wall_mm": round(w_max, 2), "bound": "ge", "spots": []}
-    lo_parts = thin_parts(sub, w_min / px, area_factor)
-    if lo_parts:
-        return {"min_wall_mm": round(w_min, 2), "bound": "le",
-                "spots": spots_mm(lo_parts)}
-    lo, hi = w_min, w_max
-    while hi - lo > px:                             # can't resolve below 1 px
-        mid = (lo + hi) / 2
-        parts = thin_parts(sub, mid / px, area_factor)
-        if parts:
-            hi, hi_parts = mid, parts
-        else:
-            lo = mid
-    return {"min_wall_mm": round(hi, 2), "bound": "exact",
-            "spots": spots_mm(hi_parts)}
+
+    wall, bound, parts = bsearch(
+        w_min, w_max, px, lambda w: thin_parts(sub, w / px, area_factor))
+
+    def splits(w):
+        comps = components(erode(sub, w / 2 / px), MIN_PIECE_PX)
+        return comps[1:] if len(comps) > 1 else []   # detached pieces, if any
+
+    base = components(sub, MIN_PIECE_PX)
+    if len(base) > 1:                       # detached before any erosion: a
+        link, lbound, islands = 0.0, "le", base[1:]  # sub-pixel connection
+    else:
+        link, lbound, islands = bsearch(w_min, w_max, px, splits)
+
+    return {"min_wall_mm": round(wall, 2), "bound": bound,
+            "spots": to_mm(parts, 2),
+            "min_link_mm": round(link, 2), "link_bound": lbound,
+            "link_spot": to_mm(islands, 1)}
 
 
-def fmt(res):
-    v = f"{res['min_wall_mm']:.2f}"
-    return {"le": "<= " + v, "ge": ">= " + v}.get(res["bound"], "   " + v)
+def fmt(value, bound):
+    v = f"{value:.2f}"
+    return {"le": "<= " + v, "ge": ">= " + v}.get(bound, "   " + v)
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("pngs", nargs="+", help="top-down renders (gallery/<name>.png)")
+    ap.add_argument("pngs", nargs="+", help="full-plate top-down renders")
     ap.add_argument("--max", type=float, default=2.0,
                     help="stop searching above this width, mm (default 2.0)")
     ap.add_argument("--area-factor", type=float, default=1.0,
@@ -187,17 +241,23 @@ def main():
         results[name] = audit(f, args.max, args.area_factor)
 
     width = max(map(len, results)) + 2
-    print(f"{'pattern':<{width}}min wall   worst spots (x, y) mm")
-    for name in sorted(results, key=lambda n: results[n]["min_wall_mm"]):
+    print(f"{'pattern':<{width}}min wall   min link   worst spots (x, y) mm")
+    key = lambda n: min(results[n]["min_wall_mm"], results[n]["min_link_mm"])
+    for name in sorted(results, key=key):
         r = results[name]
         spots = "  ".join(f"({x:5.1f},{y:5.1f})" for x, y in r["spots"])
-        print(f"{name:<{width}}{fmt(r)} mm  {spots}")
+        if r["link_bound"] != "ge" and r["link_spot"]:
+            spots += "  link@({:.1f},{:.1f})".format(*r["link_spot"][0])
+        print(f"{name:<{width}}{fmt(r['min_wall_mm'], r['bound'])} mm "
+              f"{fmt(r['min_link_mm'], r['link_bound'])} mm  {spots}")
 
     if args.json:
         with open(args.json, "w") as fh:
             json.dump(results, fh, indent=1, sort_keys=True)
     if args.write_baseline:
-        base = {n: r["min_wall_mm"] for n, r in sorted(results.items())}
+        base = {n: {"min_wall_mm": r["min_wall_mm"],
+                    "min_link_mm": r["min_link_mm"]}
+                for n, r in sorted(results.items())}
         with open(args.write_baseline, "w") as fh:
             json.dump(base, fh, indent=1, sort_keys=True)
         print(f"\nbaseline written: {args.write_baseline}")
@@ -207,16 +267,20 @@ def main():
         with open(args.check) as fh:
             base = json.load(fh)
         tol = 0.15                          # ~1.5 px of raster jitter
-        bad = [n for n, r in results.items()
-               if r["min_wall_mm"] < base.get(n, 0) - tol]
-        new = [n for n in results if n not in base]
+        bad, new = [], []
+        for n, r in results.items():
+            if n not in base:
+                new.append(n)
+                continue
+            for m in ("min_wall_mm", "min_link_mm"):
+                if r[m] < base[n][m] - tol:
+                    bad.append(f"FAIL {n}: {m} {r[m]} mm, baseline {base[n][m]} mm")
         if new:
             sys.exit(f"\nFAIL: no baseline for: {', '.join(sorted(new))} "
                      f"- run `make audit-baseline` and commit it")
         if bad:
-            for n in sorted(bad):
-                print(f"\nFAIL {n}: min wall {results[n]['min_wall_mm']} mm, "
-                      f"baseline {base[n]} mm")
+            print()
+            print("\n".join(sorted(bad)))
             sys.exit(1)
         print(f"\nOK - no pattern thinner than its baseline (tolerance {tol} mm)")
 

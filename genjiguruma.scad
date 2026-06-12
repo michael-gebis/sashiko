@@ -2,7 +2,9 @@
 // Genjiguruma (Ox-cart Wheels / 源氏車) Sashiko Template
 // A grid of cart wheels: a bridged rim with radial spokes. The spokes stop short
 // of the centre, so the open hub joins all the sectors and the bridged rim joins
-// the interior to the plate.
+// the interior to the plate. The rim bridges sit halfway BETWEEN spokes: a spoke
+// tip reaching the rim at a bridge angle would punch through the tab and leave
+// only ~0.1 mm straps (the spoke cap is nearly as wide as the tab).
 
 use <sashiko_lib.scad>
 include <sashiko_config.scad>
@@ -15,7 +17,7 @@ hub       = 3;    // open hub radius — spokes stop here (mm)
 r = groove_w / 2;
 
 module wheel(cx, cy) {
-    bridged_circle([cx, cy], R, r, bridge_w, [45, 135, 225, 315]);
+    bridged_circle([cx, cy], R, r, bridge_w, [22.5, 112.5, 202.5, 292.5]);
     for (k = [0 : spokes-1]) {
         a = 360/spokes * k;
         slot_dash([cx + hub*cos(a), cy + hub*sin(a)],
