@@ -538,12 +538,17 @@ templates:
 
 Starting points for a future pass:
 
-- **Print-fragility is unaudited.** `Volumes: 2` proves the plate is *one* solid, not that
-  its thinnest wall survives a print. The dense convergences (asanoha centres) and the
-  threshold-tuned patterns (`wachigai_woven` at `gap_deg = 7`, one above the 6 that drops
-  rings) likely have sub-millimetre features — and **nothing here has been test-printed.**
-  Planned: a `make audit` measuring the minimum wall per pattern (a 2D erosion sweep or an
-  external mesh-thickness check), plus an optional CI gate (`Volumes: 2` **and** min-wall ≥ X).
+- **Thin features are measured (`make audit`) but still untested in plastic.** Ten
+  patterns whose slots converge or run tangent — amime, asanoha, fundō-tsunagi,
+  hanmaru-tsunagi, karakusa, matsuba, nowaki, seigaiha, shippō, yabane — bottom out at
+  **knife-edge wedge tips** (≤ 0.11 mm, the audit's resolution floor): where merging slots
+  pinch the solid between them, it tapers to zero. Expect those tips to print as wisps or
+  tiny local holes — likely cosmetic on a marking jig, but they're the plates to test-print
+  first. Ten more measure 0.17–0.41 mm (hana-shippō, mitsuuroko, wachigai, wari-bishi at
+  0.17; komezashi 0.23; tumbling-blocks 0.32; kakinohanazashi 0.38; kagome, uroko,
+  wachigai_woven 0.41); everything else is ≥ 0.47 mm. If a knife-edge pattern misprints,
+  the fix is corner-gap style: stop the converging slots just short of their merge.
+  **Nothing has been test-printed yet.**
 - **Some patterns are stylised interpretations,** not validated by a practitioner — e.g.
   bishamon-kikkō, matsukawabishi, mitsumori-kikkō, mitsudomoe, fundō-tsunagi, ichimatsu,
   amime. Treat their geometry as "inspired by," not canonical.
@@ -565,6 +570,8 @@ A `Makefile` drives everything. Patterns are auto-discovered, so a new
 | `make gallery` | Render previews + thumbnails + `gallery/index.html` |
 | `make index` | Regenerate `gallery/index.html` from the `Description:` lines |
 | `make verify` | Check every pattern renders as one solid (`Volumes: 2`) |
+| `make audit` | Thinnest-wall audit of every pattern vs the committed baseline |
+| `make audit-baseline` | Refresh `minwall_baseline.json` after intentional geometry changes |
 | `make clean` | Remove `build/` and `gallery/` (all generated output) |
 | `make help` | List the targets |
 
@@ -579,6 +586,25 @@ rebuilds everything that uses it. Requires `openscad` and ImageMagick (`convert`
 Each pattern carries a `// Description:` comment (e.g. `// Description: **Amime** —
 Fishnet (網目)`). `gen_index.py` reads those to build the gallery's `index.html`
 cards — a file missing that line builds with a warning and a placeholder caption.
+
+### Min-wall audit
+
+`make verify` proves each plate is *one* solid; `make audit` covers the other half
+of printability: nothing in that solid is too thin. The plates are uniform
+extrusions, so a full-plate orthographic top render (`build/audit/`, 2000 px ≈
+0.06 mm/px) *is* the 2D geometry; `audit_minwall.py` segments it, calibrates
+mm/px from the plate's 100 mm footprint, and binary-searches the smallest width
+`w` whose morphological opening (erode + dilate by a disc of `w/2`) removes a
+significant piece of solid — a wall, neck, or wedge thinner than `w`. Each
+pattern's value is compared against the committed `minwall_baseline.json`
+(0.15 mm tolerance) and CI fails on regression; after an intentional geometry
+change, run `make audit-baseline` and commit the updated baseline.
+
+Two things to know when reading the numbers (also in `audit_minwall.py --help`):
+accuracy is pixel-bound (~±0.1 mm; render larger for finer), and the metric is
+the thinnest **unsupported span** — a thin stretch within reach of thicker bulk
+is reported as supported, so a stout lattice like mame-shibori's 5.4 mm walls
+between fatter junctions reads `>= 2.0` rather than 5.4. Needs `python3-numpy`.
 
 ## OpenSCAD tips
 

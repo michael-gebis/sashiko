@@ -5,6 +5,7 @@
 #   make gallery    render previews + thumbnails + gallery/index.html
 #   make index      regenerate gallery/index.html from the Description: lines
 #   make verify     check every pattern renders as one solid (Volumes: 2)
+#   make audit      thinnest-wall audit of every pattern vs the committed baseline
 #   make clean      remove build/ and gallery/ (all generated output)
 #   make help       list the targets
 #
@@ -25,9 +26,16 @@ IMG     := --imgsize=1000,1000 --colorscheme=Tomorrow
 TOP_CAM := --projection=ortho --camera=50,50,0,0,0,0,150
 ISO_CAM := --projection=perspective --camera=50,50,1.5,58,0,22,300
 
+# audit views: full plate in frame (the gallery top-downs crop to the centre)
+AUDIT_DIR := build/audit
+AUDITS    := $(addprefix $(AUDIT_DIR)/,$(addsuffix .png,$(PATTERNS)))
+AUDIT_IMG := --imgsize=2000,2000 --colorscheme=Tomorrow
+AUDIT_CAM := --projection=ortho --camera=50,50,0,0,0,0,280
+BASELINE  := minwall_baseline.json
+
 .DEFAULT_GOAL := all
 .SECONDARY:
-.PHONY: all stl gallery index verify clean help
+.PHONY: all stl gallery index verify audit audit-baseline clean help
 
 all: stl gallery                              ## build STLs + the gallery site
 
@@ -55,6 +63,16 @@ $(THUMBS): gallery/thumb/%.png: gallery/%.png
 
 $(INDEX): $(addsuffix .scad,$(PATTERNS)) gen_index.py
 	python3 gen_index.py
+
+$(AUDITS): $(AUDIT_DIR)/%.png: %.scad $(SHARED)
+	@mkdir -p $(AUDIT_DIR)
+	$(OPENSCAD) --render $(AUDIT_IMG) $(AUDIT_CAM) -o $@ $< 2>/dev/null
+
+audit: $(AUDITS)                              ## thinnest-wall audit vs the committed baseline
+	python3 audit_minwall.py $(AUDITS) --check $(BASELINE)
+
+audit-baseline: $(AUDITS)                     ## refresh minwall_baseline.json from current geometry
+	python3 audit_minwall.py $(AUDITS) --write-baseline $(BASELINE)
 
 verify:                                       ## check every pattern is one solid (Volumes: 2)
 	@fail=0; for p in $(PATTERNS); do \

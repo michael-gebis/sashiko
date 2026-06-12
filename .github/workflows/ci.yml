@@ -11,3 +11,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y openscad xvfb
       - name: "Verify every pattern renders as one solid (Volumes: 2)"
         run: xvfb-run -a make verify
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OpenSCAD, ImageMagick, numpy
+        run: sudo apt-get update && sudo apt-get install -y openscad imagemagick python3-numpy xvfb
+      - name: Thinnest-wall audit vs committed baseline
+        run: xvfb-run -a make audit
