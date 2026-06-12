@@ -6,7 +6,7 @@ slots. You lay the plate on fabric and mark through the slots with a chalk
 pencil / fabric pen, then stitch along the marks.
 
 **[Browse the gallery →](https://michael-gebis.github.io/sashiko/)** — top-down and
-3D renders of all 55 templates, published from the `.scad` sources to GitHub Pages.
+3D renders of all 61 templates, published from the `.scad` sources to GitHub Pages.
 
 ## How it works (and why)
 
@@ -530,11 +530,77 @@ flat overlapping-rings take is `wachigai.scad`.)
 
 **Key parameters:** `spacing` (22 mm), `ring_frac` (0.62), `gap_deg` (break width, 7°).
 
+### `sankuzushi.scad` — Triple Basket Weave (三崩し)
+
+Groups of three parallel dashes alternating horizontal/vertical on a
+checkerboard — the counting-rods basket weave. All open lines; dash ends stop
+0.8 mm short of the neighbouring trio, so no bridges are needed.
+
+**Key parameters:** `cell` (12 mm).
+
+### `higaki.scad` — Cypress Fence (檜垣)
+
+Woven cypress-bark fence: columns of three-line planks slanted at 45°,
+alternating direction per column with a half-plank drop so the planks mesh like
+braid. All open dashes, inset from the column boundaries.
+
+**Key parameters:** `w` (plank span, 12 mm), `inset` (1.5 mm).
+
+### `dan_tsunagi.scad` — Linked Steps (段つなぎ)
+
+Hitomezashi staircases climbing the plate diagonally, repeated every two steps
+so the flights nest. Each staircase is one continuous open polyline — the H and
+V slots merge at the corners — so no bridges are needed.
+
+**Key parameters:** `step` (8 mm).
+
+### `itomaki.scad` — Thread Spools (糸巻き)
+
+Angular thread spools — flange bars joined by waisted diagonal sides —
+alternating upright/sideways on a checkerboard. Six corner gaps per spool,
+sized per vertex angle (1.7 mm at the shallow 63° flange corners, 1.0 mm at the
+wide 127° waist).
+
+**Key parameters:** `cell` (16 mm), `fl_w` (13 mm), `sp_h` (8 mm), `waist` (9 mm).
+
+### `ogi_tsunagi.scad` — Linked Fans (扇つなぎ)
+
+Folding fans in half-drop rows: outer arc, pivot arc, two radial edges and
+three floating ribs. The outline is corner-gapped at the four arc/edge
+junctions and the ribs stay 2 mm clear of both arcs (the genjiguruma lesson:
+a rib tip landing on an arc break leaves hairline straps), so nothing is
+enclosed and no bridges are needed.
+
+**Key parameters:** `Ro` (13 mm), `Ri` (3.8 mm), `a0` (20°), `px`/`py` (27/16 mm).
+
+### `hougan.scad` — Stitcher's Guide Grid (方眼)
+
+Not a motif: a plain dot grid on the standard 5 mm hitomezashi pitch, for
+marking your own counted patterns. Isolated 2 mm holes; only whole dots inside
+the window are cut.
+
+**Key parameters:** `pitch` (5 mm), `dot` (1.0 mm).
+
 ## Patterns to add
 
-The 55 patterns above cover the common repertoire and then some; the
-distinct-geometric well is essentially dry. What's left is refinement of existing
-templates:
+The 61 patterns above cover the common repertoire and then some. Remaining
+candidates, roughly in order of how distinct they'd be:
+
+**Hitomezashi (one-stitch) family:**
+- [ ] Sorobandama (算盤玉) — abacus beads; offset stitches forming small diamonds.
+- [ ] Zenizashi (銭刺し) — the Tōhoku coin grid.
+- [ ] Hirayama-michi (平山道) — "mountain paths" zigzag runs.
+
+**Moyōzashi:**
+- [ ] Toridasuki (鳥襷) — half-drop overlapping circles ("crossed plovers");
+  shippō-class bridged arcs, watch the tangency wedges.
+- [ ] Inazuma (稲妻) — lightning: staircase zigzag bolts (unspiraled raimon cousin).
+- [ ] Egasumi (絵霞) — stylized mist bands with stepped ends.
+
+**Stretchier:** chidori-tsunagi (linked plovers), sasa-no-ha (bamboo leaves),
+kanagusari (chain links), kiku (chrysanthemum — risks reading as a genjiguruma
+variant). And as a possible new wing: kogin-zashi / Nanbu hishizashi *modoco*
+motifs — counted diamond-grid cousins of sashiko.
 
 **Refinements to existing templates:**
 - [ ] Tatewaku with a motif (clouds, flowers) tucked inside each bulge.
