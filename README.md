@@ -29,21 +29,26 @@ many loose pieces — lower `bridge_sp` or check bridge placement.
 | Module | Purpose |
 |--------|---------|
 | `slot_dash(p1,p2,r)` | 2D rounded slot segment (a "stadium") |
+| `corner_seg(p1,p2,r,gap)` | slot pulled in by `gap` at each end, leaving a solid corner where cells meet |
 | `bridged_line(p1,p2,r,bridge_w,bridge_sp)` | straight slot, ≥1 bridge, more on long runs |
 | `bridged_arc(c,R,r,a1,a2,bridge_w,bridge_sp)` | open arc slot with periodic bridges |
 | `bridged_circle(c,R,r,bridge_w,bridge_angles)` | circular slot, bridge centred on each given angle |
-| `sashiko_plate(w,h,t,border)` | extrudes the 2D pattern (children) through a bordered plate |
+| `hex_outline(c,R,r,gap,a0)` | regular hexagon of corner-gapped edges (`a0`: 90 = pointy-top, 0 = flat-top) |
+| `sashiko_plate(w,h,t,border,chamfer,reg)` | extrudes the 2D pattern (children) through a bordered plate; optional edge chamfer + registration holes |
 
-### Keeping a pattern in one piece — three techniques
+### Keeping a pattern in one piece
 
 Different tilings detach differently. Whichever you use, verify with `Volumes: 2`:
 - **Straight closed cells (asanoha):** `bridged_line` forces ≥1 bridge per segment.
-- **Polygon tilings (hishi):** leave the **corners** uncut — slots stop short of each
-  vertex, where several cells meet, so a solid corner joins them all and edges stay continuous.
+- **Polygon tilings (hishi, kikkō, masu):** leave the **corners** uncut — `corner_seg`
+  stops each slot short of the vertex, where several cells meet, so a solid corner joins
+  them all while the edges stay continuous (`hex_outline` applies this to hexagons).
 - **Curve/overlap patterns (shippō, seigaiha):** bridge placement matters more than count.
   Bridge where overlaps are *deep* (shippō cardinals), not where curves merely *touch*
   (tangent points give point contacts, not joins). Reduce overlap (seigaiha `col_pitch = 2R`)
   rather than fighting hundreds of tiny cells with dense bridges.
+- **Patterns that enclose nothing (dots, open curves — umebachi, tatewaku):** need no
+  bridges at all; the slots are cut straight through.
 
 Bridge width accounts for the rounded slot caps, so the *solid* tab left behind
 is actually `bridge_w` wide.
@@ -519,7 +524,7 @@ flat overlapping-rings take is `wachigai.scad`.)
 
 ## Patterns to add
 
-The 54 patterns above cover the common repertoire and then some; the
+The 55 patterns above cover the common repertoire and then some; the
 distinct-geometric well is essentially dry. What's left is refinement of existing
 templates:
 
@@ -528,6 +533,25 @@ templates:
 - [ ] Shokkō colour-variants (the octagons filled with sub-patterns).
 - [ ] Tighten mitsumori kikkō (the three-hexagon grouping) and mitsudomoe (the
   comma swirls) toward the classic crest shapes.
+
+## Known limitations & future work
+
+Starting points for a future pass:
+
+- **Print-fragility is unaudited.** `Volumes: 2` proves the plate is *one* solid, not that
+  its thinnest wall survives a print. The dense convergences (asanoha centres) and the
+  threshold-tuned patterns (`wachigai_woven` at `gap_deg = 7`, one above the 6 that drops
+  rings) likely have sub-millimetre features — and **nothing here has been test-printed.**
+  Planned: a `make audit` measuring the minimum wall per pattern (a 2D erosion sweep or an
+  external mesh-thickness check), plus an optional CI gate (`Volumes: 2` **and** min-wall ≥ X).
+- **Some patterns are stylised interpretations,** not validated by a practitioner — e.g.
+  bishamon-kikkō, matsukawabishi, mitsumori-kikkō, mitsudomoe, fundō-tsunagi, ichimatsu,
+  amime. Treat their geometry as "inspired by," not canonical.
+- **Tiling is seamless only when the pattern repeat divides the registration pitch**
+  (88 mm with the defaults; see [Registration & tiling](#registration--tiling)) — otherwise
+  placements align but show a small step at each seam.
+- **Ergonomics are untested:** 1.6 mm may be thin for a rigid 100 mm jig (it can cup), and a
+  1.2 mm slot suits a fine fabric pen, not a fat chalk pencil (the mark is ~1.2 mm wide).
 
 ## Building
 
