@@ -24,11 +24,18 @@ module slot_dash(p1, p2, r) {
 // the solid neck between two caps is 2·gap·sin(θ/2) − 2r, so for a ~0.6 mm neck
 // gap = 1.4 suits 90° corners and gap = 1.8 suits 60° corners.
 module corner_seg(p1, p2, r, gap) {
+    corner_seg2(p1, p2, r, gap, gap);
+}
+
+// corner_seg with a different gap at each end — for edges whose two vertices
+// have different angles (size each gap to its own vertex; see itomaki,
+// sorobandama).
+module corner_seg2(p1, p2, r, g1, g2) {
     L = norm([p2[0]-p1[0], p2[1]-p1[1]]);
     d = [(p2[0]-p1[0])/L, (p2[1]-p1[1])/L];
-    if (L > 2*gap + 0.1)
-        slot_dash([p1[0]+d[0]*gap, p1[1]+d[1]*gap],
-                  [p2[0]-d[0]*gap, p2[1]-d[1]*gap], r);
+    if (L > g1 + g2 + 0.1)
+        slot_dash([p1[0]+d[0]*g1, p1[1]+d[1]*g1],
+                  [p2[0]-d[0]*g2, p2[1]-d[1]*g2], r);
 }
 
 // Regular hexagon outline of corner-gapped edges. a0 = first-vertex angle:

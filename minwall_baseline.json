@@ -15,6 +15,10 @@
   "min_link_mm": 2.0,
   "min_wall_mm": 2.0
  },
+ "egasumi": {
+  "min_link_mm": 2.0,
+  "min_wall_mm": 2.0
+ },
  "fundo_tsunagi": {
   "min_link_mm": 1.38,
   "min_wall_mm": 0.11
@@ -43,6 +47,10 @@
   "min_link_mm": 1.91,
   "min_wall_mm": 1.68
  },
+ "hirayama_michi": {
+  "min_link_mm": 2.0,
+  "min_wall_mm": 2.0
+ },
  "hishi": {
   "min_link_mm": 1.35,
   "min_wall_mm": 0.76
@@ -58,6 +66,10 @@
  "igeta": {
   "min_link_mm": 0.79,
   "min_wall_mm": 1.59
+ },
+ "inazuma": {
+  "min_link_mm": 2.0,
+  "min_wall_mm": 2.0
  },
  "itomaki": {
   "min_link_mm": 0.67,
@@ -191,6 +203,10 @@
   "min_link_mm": 0.79,
   "min_wall_mm": 1.59
  },
+ "sorobandama": {
+  "min_link_mm": 0.67,
+  "min_wall_mm": 1.76
+ },
  "sugiaya": {
   "min_link_mm": 1.68,
   "min_wall_mm": 2.0
@@ -242,5 +258,9 @@
  "yotsume_goushi": {
   "min_link_mm": 0.79,
   "min_wall_mm": 1.59
+ },
+ "zenizashi": {
+  "min_link_mm": 0.79,
+  "min_wall_mm": 2.0
  }
 }

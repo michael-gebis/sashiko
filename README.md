@@ -6,7 +6,7 @@ slots. You lay the plate on fabric and mark through the slots with a chalk
 pencil / fabric pen, then stitch along the marks.
 
 **[Browse the gallery →](https://michael-gebis.github.io/sashiko/)** — top-down and
-3D renders of all 61 templates, published from the `.scad` sources to GitHub Pages.
+3D renders of all 66 templates, published from the `.scad` sources to GitHub Pages.
 
 ## How it works (and why)
 
@@ -30,6 +30,7 @@ many loose pieces — lower `bridge_sp` or check bridge placement.
 |--------|---------|
 | `slot_dash(p1,p2,r)` | 2D rounded slot segment (a "stadium") |
 | `corner_seg(p1,p2,r,gap)` | slot pulled in by `gap` at each end, leaving a solid corner where cells meet |
+| `corner_seg2(p1,p2,r,g1,g2)` | `corner_seg` with a different gap per end, for edges between unequal vertex angles |
 | `bridged_line(p1,p2,r,bridge_w,bridge_sp)` | straight slot, ≥1 bridge, more on long runs |
 | `bridged_arc(c,R,r,a1,a2,bridge_w,bridge_sp)` | open arc slot with periodic bridges |
 | `bridged_circle(c,R,r,bridge_w,bridge_angles)` | circular slot, bridge centred on each given angle |
@@ -581,26 +582,58 @@ the window are cut.
 
 **Key parameters:** `pitch` (5 mm), `dot` (1.0 mm).
 
+### `sorobandama.scad` — Abacus Beads (算盤玉)
+
+Columns of small diamonds stacked point-to-point — beads strung on abacus rods.
+Corner gaps are sized per vertex angle (1.5 mm at the pointed 77° tips, 1.2 mm
+at the wide 103° sides), and stacked tips share one solid plug, hishi-style.
+
+**Key parameters:** `bead_w`/`bead_h` (8/10 mm), `px` (rod spacing, 14 mm).
+
+### `zenizashi.scad` — Coin Stitch (銭刺し)
+
+A grid of old *mon* coins: a bridged circle with its square hole drawn inside.
+The ring's tabs sit on the diagonals, away from the corner-gapped square, so
+both the rim and the hole's interior stay anchored.
+
+**Key parameters:** `pitch` (16 mm), `Rc` (6 mm), `sq` (hole side, 5 mm).
+
+### `hirayama_michi.scad` — Mountain Paths (平山道)
+
+The hitomezashi "road over flat hills": rows of flat-topped trapezoid waves —
+flat, climb, flat, descend. One continuous open polyline per row, no bridges.
+
+**Key parameters:** `rise`/`flat` (6/6 mm), `py` (9 mm).
+
+### `inazuma.scad` — Lightning (稲妻)
+
+Lightning as stepped chevrons: staircases that climb three treads, descend
+three, and repeat, nested in rows. (Raimon coils the same vocabulary into
+spirals; dan-tsunagi runs it straight.)
+
+**Key parameters:** `s` (tread, 5 mm), `n` (treads per leg, 3), `py` (10 mm).
+
+### `egasumi.scad` — Mist Bands (絵霞)
+
+The classical mist symbol: long horizontal bars whose middles step down and
+back up, drifting at staggered offsets row to row — an airy ground pattern.
+Open polylines, no bridges.
+
+**Key parameters:** `L1`/`L2` (22/18 mm), `v` (step, 4 mm), `py` (11 mm).
+
 ## Patterns to add
 
-The 61 patterns above cover the common repertoire and then some. Remaining
-candidates, roughly in order of how distinct they'd be:
+The 66 patterns above cover the common repertoire and then some. Remaining
+candidates:
 
-**Hitomezashi (one-stitch) family:**
-- [ ] Sorobandama (算盤玉) — abacus beads; offset stitches forming small diamonds.
-- [ ] Zenizashi (銭刺し) — the Tōhoku coin grid.
-- [ ] Hirayama-michi (平山道) — "mountain paths" zigzag runs.
-
-**Moyōzashi:**
-- [ ] Toridasuki (鳥襷) — half-drop overlapping circles ("crossed plovers");
-  shippō-class bridged arcs, watch the tangency wedges.
-- [ ] Inazuma (稲妻) — lightning: staircase zigzag bolts (unspiraled raimon cousin).
-- [ ] Egasumi (絵霞) — stylized mist bands with stepped ends.
-
-**Stretchier:** chidori-tsunagi (linked plovers), sasa-no-ha (bamboo leaves),
-kanagusari (chain links), kiku (chrysanthemum — risks reading as a genjiguruma
-variant). And as a possible new wing: kogin-zashi / Nanbu hishizashi *modoco*
-motifs — counted diamond-grid cousins of sashiko.
+- [ ] Toridasuki (鳥襷) — crossed plovers. Deferred: the authentic form is
+  crossed *pairs* of slightly-offset circles, which as 1.2 mm slots produces
+  exactly the sliver geometry the audit exists to catch. Needs a design pass
+  that doubles the arcs without doubling the knife edges.
+- [ ] Stretchier: chidori-tsunagi (linked plovers), sasa-no-ha (bamboo leaves),
+  kanagusari (chain links), kiku (chrysanthemum — risks reading as a
+  genjiguruma variant). And as a possible new wing: kogin-zashi / Nanbu
+  hishizashi *modoco* motifs — counted diamond-grid cousins of sashiko.
 
 **Refinements to existing templates:**
 - [ ] Tatewaku with a motif (clouds, flowers) tucked inside each bulge.
