@@ -16,8 +16,8 @@
   "min_wall_mm": 0.11
  },
  "genjiguruma": {
-  "min_link_mm": 1.17,
-  "min_wall_mm": 2.0
+  "min_link_mm": 0.64,
+  "min_wall_mm": 0.82
  },
  "genjiko": {
   "min_link_mm": 2.0,

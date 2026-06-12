@@ -378,10 +378,12 @@ from each grid corner. Dots enclose nothing, so no bridges.
 
 A grid of wheels — a bridged rim with radial spokes that stop short of an open
 hub, so the sectors all connect through the hub and out through the rim bridges.
-The rim bridges sit halfway *between* spokes: a spoke tip reaching the rim at a
-bridge angle punches through the tab and leaves only ~0.1 mm straps.
+The rim breaks at the diagonal spokes, whose tips sit inside the breaks; the
+arcs are trimmed extra (`strap`) so each tip leaves ~0.65 mm of solid either
+side — with the stock `bridge_w` trim, the tip would punch the tab down to
+~0.1 mm straps.
 
-**Key parameters:** `spacing` (25 mm), `R` (10.5 mm), `spokes` (8).
+**Key parameters:** `spacing` (25 mm), `R` (10.5 mm), `spokes` (8), `strap` (0.65 mm).
 
 ### `mitsudomoe.scad` — Triple Swirl (三つ巴)
 
@@ -612,8 +614,9 @@ pattern:
   than one piece: the thinnest **load-bearing connection**. This catches short
   necks that min wall treats as supported — it's what found genjiguruma's
   diagonal spoke tips landing exactly on the rim's bridge tabs, leaving 0.1 mm
-  straps as each wheel's only anchor (fixed by moving the bridges between the
-  spokes). For a healthy pattern it reads as the designed bridge/neck width.
+  straps as each wheel's only anchor (fixed by trimming the rim arcs back until
+  the straps are ~0.65 mm). For a healthy pattern it reads as the designed
+  bridge/neck width.
 
 Both values are compared against the committed `minwall_baseline.json` (0.15 mm
 tolerance) and CI fails on regression; after an intentional geometry change,
