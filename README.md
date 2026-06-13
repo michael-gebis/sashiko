@@ -686,8 +686,10 @@ A `Makefile` drives everything. Patterns are auto-discovered, so a new
 | `make help` | List the targets |
 
 STLs are written to **`build/`**; the gallery (previews, thumbnails, `index.html`)
-to **`gallery/`**. Both are git-ignored — STLs ship via a GitHub Release, and the
-gallery is rendered and published to **GitHub Pages** by `.github/workflows/pages.yml`
+to **`gallery/`**. Both are git-ignored — STLs ship via a GitHub Release: publishing
+a release triggers `.github/workflows/release.yml`, which builds every pattern and
+attaches a single `sashiko-stl-<tag>.zip` (all STLs + LICENSE) to it. The gallery
+is rendered and published to **GitHub Pages** by `.github/workflows/pages.yml`
 on every push that touches a pattern (one-time setup: repo **Settings → Pages →
 Source = GitHub Actions**). Every output depends on `sashiko_lib.scad` +
 `sashiko_config.scad`, so changing a shared value (e.g. `plate_t` or `chamfer`)

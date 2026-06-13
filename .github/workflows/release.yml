@@ -1,0 +1,44 @@
+name: release
+
+# When a GitHub release is published, build every pattern's STL and attach
+# them to the release as a single zip (sashiko-stl-<tag>.zip).
+#
+# Backfill: Actions -> release -> "Run workflow" with an existing tag attaches
+# the zip to that release.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to attach the STL zip to"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  stl-zip:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
+      - name: Install OpenSCAD
+        run: sudo apt-get update && sudo apt-get install -y openscad xvfb
+      - name: Build all STLs
+        run: xvfb-run -a make -j"$(nproc)" stl
+      - name: Zip the STLs
+        run: |
+          dir="sashiko-stl-$TAG"
+          mkdir "$dir"
+          cp build/*.stl LICENSE "$dir"/
+          zip -r "$dir.zip" "$dir"
+          echo "$(ls "$dir"/*.stl | wc -l) STLs in $dir.zip"
+      - name: Attach zip to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$TAG" "sashiko-stl-$TAG.zip" --clobber
