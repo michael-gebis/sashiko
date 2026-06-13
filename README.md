@@ -8,6 +8,9 @@ pencil / fabric pen, then stitch along the marks.
 **[Browse the gallery →](https://michael-gebis.github.io/sashiko/)** — top-down and
 3D renders of all 66 templates, published from the `.scad` sources to GitHub Pages.
 
+**[Download the STLs →](https://github.com/michael-gebis/sashiko/releases/latest)** —
+every pattern as a print-ready `.stl`, bundled into one zip on the latest release.
+
 ## How it works (and why)
 
 A marking template only works if the marker can reach the cloth, so the slots
