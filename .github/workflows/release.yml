@@ -35,7 +35,8 @@ jobs:
         run: |
           dir="sashiko-stl-$TAG"
           mkdir "$dir"
-          cp build/*.stl LICENSE "$dir"/
+          cp build/*.stl "$dir"/
+          if [ -f LICENSE ]; then cp LICENSE "$dir"/; fi
           zip -r "$dir.zip" "$dir"
           echo "$(ls "$dir"/*.stl | wc -l) STLs in $dir.zip"
       - name: Attach zip to the release
