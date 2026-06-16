@@ -23,14 +23,14 @@ THUMBS := $(addprefix gallery/thumb/,$(addsuffix .png,$(PATTERNS)))
 INDEX  := gallery/index.html
 
 IMG     := --imgsize=1000,1000 --colorscheme=Tomorrow
-TOP_CAM := --projection=ortho --camera=50,50,0,0,0,0,150
-ISO_CAM := --projection=perspective --camera=50,50,1.5,58,0,22,300
+TOP_CAM := --projection=ortho --camera=60,60,0,0,0,0,150
+ISO_CAM := --projection=perspective --camera=60,60,1.5,58,0,22,360
 
 # audit views: full plate in frame (the gallery top-downs crop to the centre)
 AUDIT_DIR := build/audit
 AUDITS    := $(addprefix $(AUDIT_DIR)/,$(addsuffix .png,$(PATTERNS)))
 AUDIT_IMG := --imgsize=2000,2000 --colorscheme=Tomorrow
-AUDIT_CAM := --projection=ortho --camera=50,50,0,0,0,0,280
+AUDIT_CAM := --projection=ortho --camera=60,60,0,0,0,0,336
 BASELINE  := minwall_baseline.json
 
 .DEFAULT_GOAL := all

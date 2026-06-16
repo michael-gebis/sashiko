@@ -1,14 +1,14 @@
 {
  "amime": {
-  "min_link_mm": 1.5,
-  "min_wall_mm": 0.11
+  "min_link_mm": 1.53,
+  "min_wall_mm": 0.13
  },
  "asanoha": {
-  "min_link_mm": 1.2,
-  "min_wall_mm": 0.11
+  "min_link_mm": 1.24,
+  "min_wall_mm": 0.13
  },
  "bishamon_kikko": {
-  "min_link_mm": 1.29,
+  "min_link_mm": 1.3,
   "min_wall_mm": 1.65
  },
  "dan_tsunagi": {
@@ -20,63 +20,63 @@
   "min_wall_mm": 2.0
  },
  "fundo_tsunagi": {
-  "min_link_mm": 1.38,
-  "min_wall_mm": 0.11
+  "min_link_mm": 1.36,
+  "min_wall_mm": 0.13
  },
  "genjiguruma": {
-  "min_link_mm": 0.64,
-  "min_wall_mm": 0.82
+  "min_link_mm": 0.72,
+  "min_wall_mm": 0.83
  },
  "genjiko": {
   "min_link_mm": 2.0,
   "min_wall_mm": 2.0
  },
  "hana_shippo": {
-  "min_link_mm": 1.35,
-  "min_wall_mm": 0.17
+  "min_link_mm": 1.36,
+  "min_wall_mm": 0.19
  },
  "hanabishi": {
-  "min_link_mm": 0.58,
-  "min_wall_mm": 0.47
+  "min_link_mm": 0.54,
+  "min_wall_mm": 0.43
  },
  "hanmaru_tsunagi": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 0.11
+  "min_link_mm": 0.83,
+  "min_wall_mm": 0.13
  },
  "higaki": {
-  "min_link_mm": 1.91,
-  "min_wall_mm": 1.68
+  "min_link_mm": 1.88,
+  "min_wall_mm": 1.65
  },
  "hirayama_michi": {
   "min_link_mm": 2.0,
   "min_wall_mm": 2.0
  },
  "hishi": {
-  "min_link_mm": 1.35,
-  "min_wall_mm": 0.76
+  "min_link_mm": 1.36,
+  "min_wall_mm": 0.78
  },
  "hougan": {
   "min_link_mm": 2.0,
   "min_wall_mm": 2.0
  },
  "ichimatsu": {
-  "min_link_mm": 0.79,
+  "min_link_mm": 0.89,
   "min_wall_mm": 2.0
  },
  "igeta": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 1.59
+  "min_link_mm": 0.89,
+  "min_wall_mm": 1.65
  },
  "inazuma": {
   "min_link_mm": 2.0,
   "min_wall_mm": 2.0
  },
  "itomaki": {
-  "min_link_mm": 0.67,
+  "min_link_mm": 0.72,
   "min_wall_mm": 2.0
  },
  "janome": {
-  "min_link_mm": 1.44,
+  "min_link_mm": 1.48,
   "min_wall_mm": 2.0
  },
  "juji": {
@@ -84,92 +84,92 @@
   "min_wall_mm": 2.0
  },
  "juji_hanazashi": {
-  "min_link_mm": 0.67,
+  "min_link_mm": 0.72,
   "min_wall_mm": 2.0
  },
  "kagome": {
-  "min_link_mm": 0.67,
-  "min_wall_mm": 2.0
+  "min_link_mm": 0.72,
+  "min_wall_mm": 0.89
  },
  "kakinohanazashi": {
   "min_link_mm": 2.0,
-  "min_wall_mm": 0.38
+  "min_wall_mm": 0.31
  },
  "kanoko": {
-  "min_link_mm": 0.79,
+  "min_link_mm": 0.89,
   "min_wall_mm": 2.0
  },
  "kanze_mizu": {
   "min_link_mm": 2.0,
-  "min_wall_mm": 1.23
+  "min_wall_mm": 1.24
  },
  "karakusa": {
   "min_link_mm": 2.0,
-  "min_wall_mm": 0.11
+  "min_wall_mm": 1.24
  },
  "kawari_hanajuji": {
-  "min_link_mm": 1.11,
+  "min_link_mm": 1.24,
   "min_wall_mm": 2.0
  },
  "kikko": {
-  "min_link_mm": 1.47,
-  "min_wall_mm": 1.82
+  "min_link_mm": 1.48,
+  "min_wall_mm": 1.88
  },
  "kikko_hanabishi": {
-  "min_link_mm": 0.67,
-  "min_wall_mm": 1.0
+  "min_link_mm": 0.72,
+  "min_wall_mm": 1.07
  },
  "kikko_plus": {
-  "min_link_mm": 1.47,
-  "min_wall_mm": 1.82
+  "min_link_mm": 1.48,
+  "min_wall_mm": 1.88
  },
  "komezashi": {
   "min_link_mm": 2.0,
-  "min_wall_mm": 0.23
+  "min_wall_mm": 0.43
  },
  "kuginuki": {
-  "min_link_mm": 0.64,
-  "min_wall_mm": 1.14
+  "min_link_mm": 0.72,
+  "min_wall_mm": 1.01
  },
  "mame_shibori": {
   "min_link_mm": 2.0,
   "min_wall_mm": 2.0
  },
  "masu": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 1.59
+  "min_link_mm": 0.89,
+  "min_wall_mm": 1.65
  },
  "matsuba": {
-  "min_link_mm": 0.58,
-  "min_wall_mm": 0.11
+  "min_link_mm": 0.6,
+  "min_wall_mm": 0.13
  },
  "matsukawabishi": {
-  "min_link_mm": 1.11,
-  "min_wall_mm": 0.58
+  "min_link_mm": 1.13,
+  "min_wall_mm": 0.6
  },
  "mitsudomoe": {
-  "min_link_mm": 1.47,
-  "min_wall_mm": 1.11
+  "min_link_mm": 1.48,
+  "min_wall_mm": 1.13
  },
  "mitsumori_kikko": {
-  "min_link_mm": 1.11,
-  "min_wall_mm": 0.61
+  "min_link_mm": 1.13,
+  "min_wall_mm": 0.6
  },
  "mitsuuroko": {
-  "min_link_mm": 0.67,
-  "min_wall_mm": 0.82
+  "min_link_mm": 0.72,
+  "min_wall_mm": 0.89
  },
  "mokko": {
-  "min_link_mm": 1.59,
-  "min_wall_mm": 1.97
+  "min_link_mm": 1.65,
+  "min_wall_mm": 2.0
  },
  "nowaki": {
   "min_link_mm": 2.0,
-  "min_wall_mm": 0.11
+  "min_wall_mm": 0.13
  },
  "ogi_tsunagi": {
-  "min_link_mm": 0.82,
-  "min_wall_mm": 0.91
+  "min_link_mm": 0.89,
+  "min_wall_mm": 0.95
  },
  "raimon": {
   "min_link_mm": 2.0,
@@ -177,75 +177,75 @@
  },
  "ryusui": {
   "min_link_mm": 2.0,
-  "min_wall_mm": 1.06
+  "min_wall_mm": 1.07
  },
  "same_komon": {
-  "min_link_mm": 1.7,
+  "min_link_mm": 1.71,
   "min_wall_mm": 2.0
  },
  "sankuzushi": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 0.97
+  "min_link_mm": 0.83,
+  "min_wall_mm": 0.95
  },
  "sayagata": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 1.59
+  "min_link_mm": 0.89,
+  "min_wall_mm": 1.65
  },
  "seigaiha": {
-  "min_link_mm": 1.47,
-  "min_wall_mm": 0.11
+  "min_link_mm": 1.48,
+  "min_wall_mm": 0.13
  },
  "shippo": {
-  "min_link_mm": 1.47,
-  "min_wall_mm": 0.11
+  "min_link_mm": 1.48,
+  "min_wall_mm": 0.13
  },
  "shokko": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 1.59
+  "min_link_mm": 0.83,
+  "min_wall_mm": 1.65
  },
  "sorobandama": {
-  "min_link_mm": 0.67,
-  "min_wall_mm": 1.76
+  "min_link_mm": 0.72,
+  "min_wall_mm": 1.83
  },
  "sugiaya": {
-  "min_link_mm": 1.68,
+  "min_link_mm": 1.65,
   "min_wall_mm": 2.0
  },
  "tasuki": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 1.59
+  "min_link_mm": 0.83,
+  "min_wall_mm": 1.53
  },
  "tatewaku": {
   "min_link_mm": 2.0,
   "min_wall_mm": 2.0
  },
  "tumbling_blocks": {
-  "min_link_mm": 0.67,
-  "min_wall_mm": 2.0
+  "min_link_mm": 0.72,
+  "min_wall_mm": 0.89
  },
  "umebachi": {
   "min_link_mm": 2.0,
-  "min_wall_mm": 0.91
+  "min_wall_mm": 0.95
  },
  "uroko": {
-  "min_link_mm": 0.67,
-  "min_wall_mm": 0.82
+  "min_link_mm": 0.72,
+  "min_wall_mm": 0.83
  },
  "wachigai": {
-  "min_link_mm": 1.47,
-  "min_wall_mm": 0.17
+  "min_link_mm": 1.48,
+  "min_wall_mm": 0.13
  },
  "wachigai_woven": {
-  "min_link_mm": 0.38,
-  "min_wall_mm": 0.41
+  "min_link_mm": 0.43,
+  "min_wall_mm": 0.43
  },
  "wari_bishi": {
-  "min_link_mm": 0.47,
-  "min_wall_mm": 0.17
+  "min_link_mm": 0.43,
+  "min_wall_mm": 0.19
  },
  "yabane": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 0.11
+  "min_link_mm": 0.83,
+  "min_wall_mm": 0.13
  },
  "yagasuri": {
   "min_link_mm": 2.0,
@@ -256,11 +256,11 @@
   "min_wall_mm": 2.0
  },
  "yotsume_goushi": {
-  "min_link_mm": 0.79,
-  "min_wall_mm": 1.59
+  "min_link_mm": 0.89,
+  "min_wall_mm": 1.65
  },
  "zenizashi": {
-  "min_link_mm": 0.79,
+  "min_link_mm": 0.89,
   "min_wall_mm": 2.0
  }
 }

@@ -5,7 +5,7 @@ full-plate top-down render.
 The plates are uniform extrusions, so a top-down orthographic PNG *is* the 2D
 solid geometry, already rasterized: background-coloured pixels are cuts (or
 outside the plate), everything else is solid. We segment that mask, calibrate
-mm/px from the plate's known 100 mm footprint, and report two widths:
+mm/px from the plate's known 120 mm footprint, and report two widths:
 
 * **min wall** — the smallest w whose morphological opening (erode + dilate by
   a disc of radius w/2) removes a significant piece of solid: a wall, neck, or
@@ -45,7 +45,7 @@ import sys
 
 import numpy as np
 
-PLATE_MM = 100.0          # plate footprint; calibrates mm/px per image
+PLATE_MM = 120.0          # plate footprint (must match plate_w/h in sashiko_config.scad)
 BG_DIST = 60              # min L1 RGB distance from background to count as solid
 MIN_AREA_PX = 4.0         # ignore removed blobs smaller than this (AA specks)
 MIN_PIECE_PX = 25         # ignore detached crumbs smaller than this (erosion litter)

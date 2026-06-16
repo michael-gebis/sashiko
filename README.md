@@ -71,11 +71,11 @@ template files.
 
 | Parameter | Value | Where | Notes |
 |-----------|-------|-------|-------|
-| `plate_w/h` | 100 mm | config | Template size |
-| `plate_t` | 1.6 mm | config | Plate thickness (slots cut through all of it) |
+| `plate_w/h` | 120 mm | config | Template size |
+| `plate_t` | 0.8 mm | config | Plate thickness (slots cut through all of it) |
 | `groove_w` | 1.2 mm | config | Slot width |
 | `border` | 6 mm | config | Solid margin around plate edge |
-| `chamfer` | 0.5 mm | config | 45° bevel on the four outer top edges (0 = off; keep ≤ t/2) |
+| `chamfer` | 0.3 mm | config | 45° bevel on the four outer top edges (0 = off; keep ≤ t/2) |
 | `reg` | off | config | Datum holes at the pattern-window corners, for tiling (see below) |
 | `bridge_w` | 1.4 mm | config | Solid tab left in each slot (~1.2 mm min for strength) |
 | `bridge_sp` | 14 mm | template | Target spacing between bridges on long lines |
@@ -87,10 +87,10 @@ window (the marked area) on every plate. To cover a piece larger than one plate:
 mark the pattern **and** the four datum dots, then reposition the plate so its
 leading holes sit on the previous placement's dots. That steps the plate by
 exactly the window size — `plate_w − 2·border` across, `plate_h − 2·border` down
-(88 mm with the defaults) — and butts the two patterns at the boundary.
+(108 mm with the defaults) — and butts the two patterns at the boundary.
 
 The join is **seamless only if the pattern's repeat divides that pitch**, so pick
-a scale that does (e.g. `cell = 8 / 11 / 16 / 22 mm`). Otherwise placements are
+a scale that does (e.g. `cell = 9 / 12 / 18 / 27 mm`). Otherwise placements are
 still evenly aligned, just with a small step at each seam. `reg` is off by default.
 
 ## Files
@@ -666,9 +666,9 @@ Starting points for a future pass:
   bishamon-kikkō, matsukawabishi, mitsumori-kikkō, mitsudomoe, fundō-tsunagi, ichimatsu,
   amime. Treat their geometry as "inspired by," not canonical.
 - **Tiling is seamless only when the pattern repeat divides the registration pitch**
-  (88 mm with the defaults; see [Registration & tiling](#registration--tiling)) — otherwise
+  (108 mm with the defaults; see [Registration & tiling](#registration--tiling)) — otherwise
   placements align but show a small step at each seam.
-- **Ergonomics are untested:** 1.6 mm may be thin for a rigid 100 mm jig (it can cup), and a
+- **Ergonomics are untested:** 0.8 mm is thin for a rigid 120 mm jig (expect it to cup or flex), and a
   1.2 mm slot suits a fine fabric pen, not a fat chalk pencil (the mark is ~1.2 mm wide).
 
 ## Building
@@ -707,8 +707,8 @@ cards — a file missing that line builds with a warning and a placeholder capti
 `make verify` proves each plate is *one* solid; `make audit` covers the other half
 of printability: nothing in that solid is too thin. The plates are uniform
 extrusions, so a full-plate orthographic top render (`build/audit/`, 2000 px ≈
-0.06 mm/px) *is* the 2D geometry; `audit_minwall.py` segments it, calibrates
-mm/px from the plate's 100 mm footprint, and binary-searches two widths per
+0.07 mm/px) *is* the 2D geometry; `audit_minwall.py` segments it, calibrates
+mm/px from the plate's 120 mm footprint, and binary-searches two widths per
 pattern:
 
 - **min wall** — smallest `w` whose morphological opening (erode + dilate by a
